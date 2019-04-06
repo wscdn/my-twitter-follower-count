@@ -33,6 +33,6 @@ function getTwitterStatsCount($username, $cache = false, $cachetime = 1800, $sta
   
 }
 
-$data = [ 'follower_count' =>  getTwitterStatsCount('muazramdany', false) ];
+$data = [ 'followers' =>  getTwitterStatsCount('muazramdany', false) ];
 
 echo json_encode($data);
