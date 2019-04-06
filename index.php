@@ -33,7 +33,7 @@ function getTwitterStatsCount($username, $cache = false, $cachetime = 1800, $sta
 $getuser = @$_GET['user'];
 
 if($getuser) {
-	$data = [ 'followers' =>  getTwitterStatsCount('muazramdany', false) ];
+	$data = [ 'followers' =>  getTwitterStatsCount($getuser, false) ];
 }
 else {
 	$data = [ 'error' => 'fetching' ];
