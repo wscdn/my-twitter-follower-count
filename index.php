@@ -1,7 +1,10 @@
 <?php
+
+set_time_limit(0);
+header('Access-Control-Allow-Origin: *');
+
 /**
  * Get following/followers count of an Twitter account, without using 1.1 API
- * @author Lancelot HARDEL
  * @param username That's clear
  * @param cache If you want to enable cache (or not)
  * @param cachetime Time that the cachefile is valied
@@ -12,11 +15,8 @@ function getTwitterStatsCount($username, $cache = false, $cachetime = 1800, $sta
   $cachefile = 'cached-'.$stat_name.'-'.$username; # Name of the cached file 
   # Serve from the cache if it is younger than $cachetime
   if (file_exists($cachefile) && time() - $cachetime < filemtime($cachefile)) :
-    
     return file_get_contents($cachefile);
-    
   else :
-    
     # Get Twitter data :
     $twitter_data = file_get_contents('https://mobile.twitter.com/'.$username);
     # Regex to get follower count :
@@ -24,15 +24,18 @@ function getTwitterStatsCount($username, $cache = false, $cachetime = 1800, $sta
     # Some operation :
     $twitter['count'] = str_replace(',', '', $match[1]);
     $twitter['count'] = intval($twitter['count']);
-        
     # Write cache :
     if($cache){ $cached = fopen($cachefile, 'w'); fwrite($cached, $twitter['count']); fclose($cached); }
     return $twitter['count']; # Done !
-    
   endif;
-  
 }
 
-$data = [ 'followers' =>  getTwitterStatsCount('muazramdany', false) ];
+$getuser = @$_GET['user'];
 
+if($getuser) {
+	$data = [ 'followers' =>  getTwitterStatsCount('muazramdany', false) ];
+}
+else {
+	$data = [ 'error' => 'fetching' ];
+}
 echo json_encode($data);
